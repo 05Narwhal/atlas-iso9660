@@ -1,0 +1,37 @@
+[package]
+name = "atlas-iso9660"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.88"
+license = "MIT OR Apache-2.0"
+description = "Read ISO 9660 (ECMA-119) discs with Joliet and Rock Ridge extensions."
+repository = "https://github.com/05Narwhal/atlas-iso9660"
+readme = "README.md"
+keywords = ["iso9660", "iso", "cdrom", "filesystem", "parser"]
+categories = ["filesystem", "parser-implementations"]
+authors = ["Julian A. Loy"]
+
+[features]
+# Test volume builders and seed inputs, for crates that test against this one.
+test-util = []
+
+[dependencies]
+atlas-fs-core = { version = "0.1", path = "X:/Documents/Coding/Projects/Libraries/Rust/atlas-fs-core" }
+atlas-fat = { version = "0.1", path = "X:/Documents/Coding/Projects/Libraries/Rust/atlas-fat" }
+
+[dev-dependencies]
+# The FAT test volume builder (`pattern`) is shared by this crate's tests.
+atlas-fat = { version = "0.1", path = "X:/Documents/Coding/Projects/Libraries/Rust/atlas-fat", features = ["test-util"] }
+
+[lints.rust]
+unsafe_code = "forbid"
+unused_must_use = "deny"
+rust_2018_idioms = { level = "warn", priority = -1 }
+
+[lints.clippy]
+all = { level = "warn", priority = -1 }
+dbg_macro = "warn"
+todo = "warn"
+print_stdout = "warn"
+print_stderr = "warn"
+undocumented_unsafe_blocks = "deny"
