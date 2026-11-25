@@ -1,6 +1,6 @@
 # atlas-iso9660
 
-<!-- badges -->[![crates.io](https://img.shields.io/crates/v/atlas-iso9660.svg)](https://crates.io/crates/atlas-iso9660) [![docs.rs](https://img.shields.io/docsrs/atlas-iso9660)](https://docs.rs/atlas-iso9660) [![CI](https://github.com/05Narwhal/atlas-iso9660/actions/workflows/ci.yml/badge.svg)](https://github.com/05Narwhal/atlas-iso9660/actions/workflows/ci.yml) ![License](https://img.shields.io/crates/l/atlas-iso9660.svg)
+[![crates.io](https://img.shields.io/crates/v/atlas-iso9660.svg)](https://crates.io/crates/atlas-iso9660) [![docs.rs](https://img.shields.io/docsrs/atlas-iso9660)](https://docs.rs/atlas-iso9660) [![CI](https://github.com/05Narwhal/atlas-iso9660/actions/workflows/ci.yml/badge.svg)](https://github.com/05Narwhal/atlas-iso9660/actions/workflows/ci.yml) ![License](https://img.shields.io/crates/l/atlas-iso9660.svg)
 
 A read-only ISO 9660 (ECMA-119) reader. It implements `atlas_fs_core::fs::FileSystem`, so a mounted volume lists folders, looks up names, reads
 file content and reports its allocation through the same trait as the other `atlas-*` readers.
