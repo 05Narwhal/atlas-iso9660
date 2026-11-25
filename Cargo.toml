@@ -17,12 +17,12 @@ authors = ["Julian A. Loy"]
 test-util = []
 
 [dependencies]
-atlas-fs-core = { version = "0.1", path = "X:/Documents/Coding/Projects/Libraries/Rust/atlas-fs-core" }
-atlas-fat = { version = "0.1", path = "X:/Documents/Coding/Projects/Libraries/Rust/atlas-fat" }
+atlas-fs-core = { version = "0.1", path = "../atlas-fs-core" }
+atlas-fat = { version = "0.1", path = "../atlas-fat" }
 
 [dev-dependencies]
 # The FAT test volume builder (`pattern`) is shared by this crate's tests.
-atlas-fat = { version = "0.1", path = "X:/Documents/Coding/Projects/Libraries/Rust/atlas-fat", features = ["test-util"] }
+atlas-fat = { version = "0.1", path = "../atlas-fat", features = ["test-util"] }
 
 [lints.rust]
 unsafe_code = "forbid"
