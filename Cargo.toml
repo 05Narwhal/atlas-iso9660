@@ -1,12 +1,12 @@
 [package]
 name = "atlas-iso9660"
-version = "26.0.1-a"
+version = "26.0.2-a"
 edition = "2024"
 rust-version = "1.88"
 license = "MIT OR Apache-2.0"
 description = "Read ISO 9660 (ECMA-119) discs with Joliet and Rock Ridge extensions."
 repository = "https://github.com/05Narwhal/atlas-iso9660"
-homepage = "https://julianloy.com"
+documentation = "https://disk-atlas.julianloy.com/docs"
 readme = "README.md"
 keywords = ["iso9660", "iso", "cdrom", "filesystem", "parser"]
 categories = ["filesystem", "parser-implementations"]
@@ -17,12 +17,12 @@ authors = ["Julian A. Loy"]
 test-util = []
 
 [dependencies]
-atlas-fs-core = { version = "26.0.1-a", path = "../atlas-fs-core" }
-atlas-fat = { version = "26.0.1-a", path = "../atlas-fat" }
+atlas-fs-core = { version = "26.0.2-a", path = "../atlas-fs-core" }
+atlas-fat = { version = "26.0.2-a", path = "../atlas-fat" }
 
 [dev-dependencies]
 # The FAT test volume builder (`pattern`) is shared by this crate's tests.
-atlas-fat = { version = "26.0.1-a", path = "../atlas-fat", features = ["test-util"] }
+atlas-fat = { version = "26.0.2-a", path = "../atlas-fat", features = ["test-util"] }
 
 [lints.rust]
 unsafe_code = "forbid"
