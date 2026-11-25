@@ -2,28 +2,54 @@
 
 [![crates.io](https://img.shields.io/crates/v/atlas-iso9660.svg)](https://crates.io/crates/atlas-iso9660) [![docs.rs](https://img.shields.io/docsrs/atlas-iso9660)](https://docs.rs/atlas-iso9660) [![CI](https://github.com/05Narwhal/atlas-iso9660/actions/workflows/ci.yml/badge.svg)](https://github.com/05Narwhal/atlas-iso9660/actions/workflows/ci.yml) ![License](https://img.shields.io/crates/l/atlas-iso9660.svg)
 
-A read-only ISO 9660 (ECMA-119) reader. It implements `atlas_fs_core::fs::FileSystem`, so a mounted volume lists folders, looks up names, reads
-file content and reports its allocation through the same trait as the other `atlas-*` readers.
+**A read-only ISO 9660 (ECMA-119) reader with Joliet and Rock Ridge.**
 
-- Volume descriptors from byte 32768; picks Rock Ridge, else Joliet (UCS-2 names), else plain ISO names.
-- Rock Ridge: long names, POSIX modes and owners, symbolic links, timestamps, continuation areas.
-- Files in several extents (multi-extent runs) read as one file.
-- No `unsafe`. Every length, offset and count read from the disk is checked; damage is an error, not a panic.
+`atlas-iso9660` mounts a CD or DVD data disc, or an `.iso` image, from any `BlockSource` and implements `atlas_fs_core::fs::FileSystem`, so folders, names and file content come through the same trait as every other `atlas-*` reader.
+
+## Features
+
+- Volume descriptors are scanned from byte 32768, and the best tree is picked automatically: **Rock Ridge** when the root's `.` record carries an `SP` entry, else **Joliet** (UCS-2 names), else plain ISO names.
+- **Rock Ridge**: long names, POSIX modes and owners, symbolic links, timestamps and continuation areas.
+- Files in several extents (runs of records marked "continues") read as one file.
+
+## Quick start
 
 ```rust,no_run
+use std::path::Path;
 use std::sync::Arc;
-use atlas_fs_core::fs::FileSystem;
-use atlas_fs_core::io::block::BlockSource;
+
+use atlas_fs_core::fs::{DirBatch, DirProgress, FileSystem};
 use atlas_fs_core::io::file::FileSource;
 
-let source: Arc<dyn BlockSource> = Arc::new(FileSource::open("volume.img".as_ref())?);
+let source = Arc::new(FileSource::open(Path::new("volume.img"))?);
 let volume = atlas_iso9660::mount(source)?;
-let mut dir = volume.read_dir(volume.root())?;
-# Ok::<(), atlas_fs_core::error::Error>(())
+println!("{}", volume.info().name);
+
+let mut stream = volume.read_dir(volume.root())?;
+let mut batch = DirBatch::new();
+while stream.next_batch(&mut batch, 256)? == DirProgress::More {}
+for entry in batch.iter() {
+    println!("{}", entry.name);
+}
 ```
 
-The `test-util` feature exposes the test image builder and fuzz seed inputs; it is for tests of crates that use
-this one and is not part of the stable API.
+## How it works
+
+A folder is one contiguous extent of records; a record never crosses a logical block, and a zero length byte pads to the next block. Node ids are the volume byte offset of the directory record, and the root's is the record inside its volume descriptor.
+
+The UDF reader uses this crate's date arithmetic.
+
+## Safety and robustness
+
+- **No `unsafe`.** The crate is `#![forbid(unsafe_code)]`.
+- **On-disk bytes are hostile.** Every length, offset and count read from a disk is validated before use. Damage is returned as an error, never a panic, an unchecked index or an unbounded loop.
+- **Lints enforce it.** Clippy's `indexing_slicing`, `arithmetic_side_effects`, `unwrap_used`, `expect_used` and `panic` lints are on for the library code.
+- **Read-only.** Nothing in this crate writes to a disk or image.
+- **Fuzzed.** A `cargo-fuzz` target in `fuzz/` runs the parser on arbitrary bytes.
+
+## Feature flags
+
+- `test-util`: exposes the synthetic test image builders and fuzz seed inputs this crate's own tests use, for tests of crates built on it. It is not part of the stable API.
 
 ## Install
 
@@ -32,7 +58,9 @@ this one and is not part of the stable API.
 atlas-iso9660 = "26.0.1-a"
 ```
 
-Minimum supported Rust version: 1.88.
+Versions follow `26.MAJOR.MINOR-STAGE`: the year, the major and minor version, and a stage letter (`a` alpha, `b` beta, `s` stable). Cargo treats a stage suffix as a pre-release, so name the version exactly as above.
+
+Minimum supported Rust version: 1.88 (edition 2024).
 
 ## Licence
 
