@@ -6,6 +6,7 @@ rust-version = "1.88"
 license = "MIT OR Apache-2.0"
 description = "Read ISO 9660 (ECMA-119) discs with Joliet and Rock Ridge extensions."
 repository = "https://github.com/05Narwhal/atlas-iso9660"
+homepage = "https://julianloy.com"
 readme = "README.md"
 keywords = ["iso9660", "iso", "cdrom", "filesystem", "parser"]
 categories = ["filesystem", "parser-implementations"]
